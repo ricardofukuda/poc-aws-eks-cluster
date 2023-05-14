@@ -6,9 +6,10 @@ https://registry.terraform.io/modules/terraform-aws-modules/eks/aws/19.13.1
 
 https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/4.0.1
 
-## Contains
-- Nginx Ingress;
+## Automatically Deploys
+- NGINX Ingress;
 - K8S Dashboard;
+- AWS EBS CSI;
 
 ## Kubectl config
 ```
