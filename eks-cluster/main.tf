@@ -53,8 +53,9 @@ module "eks" {
     }
   }
 
-  create_kms_key = true
+  create_kms_key = false
   kms_key_deletion_window_in_days = 7
+  cluster_encryption_config = {}
 
   create_cloudwatch_log_group = false # disable cloudwatch logging
   cluster_enabled_log_types = [] # disable cloudwatch logging
