@@ -1,18 +1,7 @@
-data "template_file" "ingress_nginx" {
-  template = file("config/ingress-nginx.yml")
-  vars = {
-    sg_id = aws_security_group.nginx_my_ip.id
-  }
-}
-
-data "http" "icanhazip" { # get my current public ip
-   url = "http://icanhazip.com"
-}
-
 resource "aws_security_group" "nginx_my_ip" {
   name        = "nginx_my_ip"
   description = "Allow my ip inbound traffic"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = data.aws_vpc.vpc.id
 
   ingress {
     description      = "https"
@@ -41,19 +30,4 @@ resource "aws_security_group" "nginx_my_ip" {
   tags = {
     Name = "nginx_my_ip"
   }
-}
-
-# https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx/4.6.1
-resource "helm_release" "ingress-nginx" {
-  name       = "ingress-nginx"
-  create_namespace = true
-
-  repository = "https://kubernetes.github.io/ingress-nginx"
-  chart      = "ingress-nginx"
-  namespace  = "ingress-nginx"
-  version    = "4.6.1"
-
-  values = [data.template_file.ingress_nginx.rendered]
-
-  depends_on = [ module.eks ]
 }

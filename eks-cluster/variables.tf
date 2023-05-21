@@ -17,7 +17,6 @@ variable "vpc" {
 variable "tags" {
   type = any
   default = {
-    Cluster = "eks-dev"
     Environment = "dev"
     Terraform = "true"
   }
