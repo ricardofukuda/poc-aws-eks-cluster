@@ -1,3 +1,13 @@
+data "aws_subnet" "private_selected" {
+  vpc_id = module.vpc.vpc_id
+  availability_zone = "us-east-1b"
+
+  filter {
+    name   = "tag:Tier"
+    values = ["private"]
+  }
+}
+
 module "eks" {
   source  = "terraform-aws-modules/eks/aws"
   version = "19.13.1"
@@ -31,7 +41,8 @@ module "eks" {
   eks_managed_node_group_defaults = {
     ami_type       = "AL2_x86_64"
 
-    subnet_ids = module.vpc.private_subnets # by default, we use private subnets
+    #subnet_ids = module.vpc.private_subnets # by default, we use private subnets
+    subnet_ids = [data.aws_subnet.private_selected.id] # by default, we use private subnets
 
     network_interfaces = [
       {
@@ -44,11 +55,11 @@ module "eks" {
     apps = {
       min_size     = 1
       max_size     = 2
-      desired_size = 1
+      desired_size = 2
 
       disk_size = 20
 
-      instance_types = ["t3.small"]
+      instance_types = ["t3.medium"]
       capacity_type  = "SPOT"
     }
   }

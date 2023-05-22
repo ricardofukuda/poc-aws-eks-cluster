@@ -10,3 +10,18 @@ service:
 
 rbac:
   clusterReadOnlyRole: true
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 200Mi
+  limits:
+    cpu: 200m
+    memory: 200Mi
+
+
+metricsScraper:
+  enabled: true
+
+metrics-server:
+  enabled: true

@@ -6,7 +6,7 @@ variable "env" {
 variable "tags" {
   type = any
   default = {
-    App = "nginx-ingress"
+    App = "airflow"
     Environment = "dev"
     Terraform = "true"
   }

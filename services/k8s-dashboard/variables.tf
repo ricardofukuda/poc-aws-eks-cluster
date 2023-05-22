@@ -6,6 +6,7 @@ variable "env" {
 variable "tags" {
   type = any
   default = {
+    App = "k8s-dashboard"
     Environment = "dev"
     Terraform = "true"
   }

@@ -1,0 +1,115 @@
+ingress:
+  # Enable all ingress resources (deprecated - use ingress.web.enabled and ingress.flower.enabled)
+  enabled: false
+  web:
+    # Enable web ingress resource
+    enabled: false
+  flower:
+    # Enable web ingress resource
+    enabled: false
+
+# Airflow executor
+# One of: LocalExecutor, LocalKubernetesExecutor, CeleryExecutor, KubernetesExecutor, CeleryKubernetesExecutor
+executor: "CeleryExecutor"
+
+migrateDatabaseJob:
+  enabled: true
+  useHelmHooks: false
+
+# Otherwise pass connection values in
+data:
+  metadataConnection: # in production, create a new Secret and configure the name at ".Values.data.metadataSecretName"
+    user: postgres
+    pass: postgres
+    protocol: postgresql
+    port: 5432
+    db: postgres
+
+postgresql: # temporary Pod
+  enabled: true
+  image:
+    tag: "11"
+  auth:
+    enablePostgresUser: true
+    postgresPassword: postgres
+    username: postgres
+    password: postgres
+
+workers:
+  persistence:
+    # Enable persistent volumes
+    enabled: true
+    # Volume size for worker StatefulSet
+    size: 100Gi
+    # If using a custom storageClass, pass name ref to all statefulSets here
+    storageClassName: gp3
+  resources:
+    requests:
+      cpu: 150m
+      memory: 500Mi
+    limits:
+      cpu: 150m
+      memory: 500Mi
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: topology.kubernetes.io/zone
+            operator: In
+            values:
+            - us-east-1b
+
+scheduler:
+  resources:
+    requests:
+      cpu: 150m
+      memory: 500Mi
+    limits:
+      cpu: 150m
+      memory: 500Mi
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: topology.kubernetes.io/zone
+            operator: In
+            values:
+            - us-east-1b
+
+webservice:
+  resources:
+    requests:
+      cpu: 150m
+      memory: 256Mi
+    limits:
+      cpu: 150m
+      memory: 256Mi
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: topology.kubernetes.io/zone
+            operator: In
+            values:
+            - us-east-1b
+
+triggerer:
+  resources:
+    requests:
+      cpu: 150m
+      memory: 500Mi
+    limits:
+      cpu: 150m
+      memory: 500Mi
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: topology.kubernetes.io/zone
+            operator: In
+            values:
+            - us-east-1b
